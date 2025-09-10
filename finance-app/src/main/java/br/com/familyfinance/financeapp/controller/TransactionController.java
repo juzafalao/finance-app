@@ -1,22 +1,18 @@
 package br.com.familyfinance.financeapp.controller;
 
-import java.security.Principal;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import br.com.familyfinance.financeapp.entity.User;
 import br.com.familyfinance.financeapp.service.TransactionService;
 import br.com.familyfinance.financeapp.service.UserService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/transactions")
 public class TransactionController {
-
     private final TransactionService transactionService;
     private final UserService userService;
 
-    // Construtor explícito para injeção de dependências
     public TransactionController(TransactionService transactionService, UserService userService) {
         this.transactionService = transactionService;
         this.userService = userService;

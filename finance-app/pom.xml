@@ -81,11 +81,11 @@
             <version>${jjwt.version}</version>
             <scope>runtime</scope>
         </dependency>
+        <!-- Substituí jjwt-jackson por jjwt-gson para evitar conflitos de versões -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-jackson</artifactId>
-            <version>${jjwt.version}</version>
-            <scope>runtime</scope>
+            <artifactId>jjwt-gson</artifactId>
+            <version>0.11.5</version>
         </dependency>
 
         <!-- Test -->

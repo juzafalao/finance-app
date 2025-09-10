@@ -4,12 +4,10 @@ import br.com.familyfinance.financeapp.entity.User;
 import br.com.familyfinance.financeapp.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service
 public class UserService {
-
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -23,12 +21,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    // novo método para busca por username
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
-    // opcional: manter busca por email também
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }

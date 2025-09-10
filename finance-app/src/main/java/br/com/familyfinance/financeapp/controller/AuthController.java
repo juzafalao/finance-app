@@ -8,11 +8,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
-        // TODO: Substituir por autenticação real e geração de JWT
-        String token = "fake-jwt-token-for-" + loginRequest.getUsername();
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+        // Em uma aplicação real, você validaria o usuário e geraria um JWT.
+        String token = "fake-token-for-" + request.getUsername();
         return ResponseEntity.ok(new LoginResponse(token));
     }
 }
