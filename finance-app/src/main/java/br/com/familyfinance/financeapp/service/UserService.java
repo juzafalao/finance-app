@@ -1,32 +1,23 @@
 package br.com.familyfinance.financeapp.service;
 
-import java.util.Optional;
-
+import br.com.familyfinance.financeapp.entity.User;
+import br.com.familyfinance.financeapp.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import br.com.familyfinance.financeapp.entity.User;
-import br.com.familyfinance.financeapp.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public User save(User user) {
-        // precisa do getPassword() -> fornecido por Lombok no User
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public User create(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
-    }
-
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
-
-    public boolean existsByUsername(String username) {
-        return userRepository.existsByUsername(username);
     }
 }

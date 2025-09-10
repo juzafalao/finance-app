@@ -1,33 +1,36 @@
 package br.com.familyfinance.financeapp.service;
 
-import java.util.List;
-
+import br.com.familyfinance.financeapp.entity.User;
+import br.com.familyfinance.financeapp.repository.UserRepository;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.*;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import br.com.familyfinance.financeapp.entity.User;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserService userService;
+    private final UserRepository userRepository;
+
+    public CustomUserDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User u = userService.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        User u = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username));
 
-        // usa getRole(), getUsername(), getPassword() – agora existem via Lombok
-        var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + u.getRole().name()));
-        return new org.springframework.security.core.userdetails.User(
-                u.getUsername(), u.getPassword(), authorities);
-    }
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + u.getRole()));
 
-    // conveniência para cadastro
-    public User save(User user) {
-        return userService.save(user);
+        return org.springframework.security.core.userdetails.User
+                .withUsername(u.getUsername())
+                .password(u.getPassword())
+                .authorities(authorities)
+                .build();
     }
 }
