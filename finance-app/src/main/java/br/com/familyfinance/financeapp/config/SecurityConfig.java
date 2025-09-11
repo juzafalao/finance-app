@@ -2,29 +2,17 @@ package br.com.familyfinance.financeapp.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-@EnableWebSecurity
 public class SecurityConfig {
 
+    /**
+     * PasswordEncoder delegating, suporta {noop}, {bcrypt}, etc.
+     */
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/h2-console/**", "/health", "/favicon.ico").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
-                .headers(headers -> headers
-                        // nova forma de desativar X-Frame-Options
-                        .frameOptions(frameOptions -> frameOptions.disable())
-                )
-                .formLogin(form -> form
-                        .loginPage("/login").permitAll()
-                );
-        return http.build();
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 }
