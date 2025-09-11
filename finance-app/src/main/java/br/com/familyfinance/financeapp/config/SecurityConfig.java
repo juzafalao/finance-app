@@ -1,16 +1,30 @@
-// src/main/java/br/com/familyfinance/financeapp/config/SecurityConfig.java
 package br.com.familyfinance.financeapp.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
+
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/**", "/h2-console/**", "/health", "/favicon.ico").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
+                .headers(headers -> headers
+                        // nova forma de desativar X-Frame-Options
+                        .frameOptions(frameOptions -> frameOptions.disable())
+                )
+                .formLogin(form -> form
+                        .loginPage("/login").permitAll()
+                );
+        return http.build();
     }
 }
-
