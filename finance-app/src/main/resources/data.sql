@@ -1,7 +1,8 @@
 -- Usuário Admin
 INSERT INTO users (id, username, email, password, role) VALUES
     (1, 'admin', 'admin@example.com', '{noop}admin123', 'ROLE_ADMIN');
-
+INSERT INTO users (id, username, email, password, role) VALUES
+    (2, 'ju', 'ju@email.com', '{noop}admin123', 'ROLE_ADMIN');
 -- Categorias
 INSERT INTO category (id, name, type) VALUES
                                           (1, 'Alimentação', 'DESPESA'),
